@@ -17,6 +17,15 @@
         <div class="box-header">
         </div>
         <div class="box-body">
+
+            @if($errors->any())
+                <div class="alert alert-warning">
+                    @foreach($errors->all() as $error)
+                        <p>{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
+
             <form action="{{ route('balance.store') }}" method="post">
                 {!! csrf_field() !!}
                 <div class="form-group">
