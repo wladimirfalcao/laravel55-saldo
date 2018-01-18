@@ -19,7 +19,7 @@
         </div>
         <div class="box-body">
             @include('admin.incluides.alert')
-            <form action="{{ route('withdrawn.store') }}" method="post">
+            <form action="{{ route('withdraw.store') }}" method="post">
                 {!! csrf_field() !!}
                 <div class="form-group">
                     <input type="text" name="value" class="form-control" placeholder="Valor Retirada">
