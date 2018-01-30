@@ -25,7 +25,7 @@
                 </a>
                 <a href="{{ route('balance.transfer') }}" class="btn btn-info">
                     <i class="fa fa-exchange" aria-hidden="true"></i>
-                    Sacar
+                    Tranferir
                 </a>
             @endif
         </div>
