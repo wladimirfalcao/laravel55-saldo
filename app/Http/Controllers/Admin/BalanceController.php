@@ -20,7 +20,10 @@ class BalanceController extends Controller
 
     public function deposit()
     {
-        return view('admin.balance.deposit');
+        $balance = auth()->user()->balance;
+        $amount = $balance ? $balance->amount : 0;
+
+        return view('admin.balance.deposit',compact('amount'));
     }
 
     public function depositStore(MoneyValidationFormRequest $request)
@@ -41,7 +44,9 @@ class BalanceController extends Controller
 
     public function withdraw()
     {
-        return view('admin.balance.withdraw');
+        $balance = auth()->user()->balance;
+        $amount = $balance ? $balance->amount : 0;
+        return view('admin.balance.withdraw', compact('amount'));
     }
 
     public function withdrawStore(MoneyValidationFormRequest $request)
@@ -67,19 +72,41 @@ class BalanceController extends Controller
 
     public function confirmTransfer(Request $request, User $user)
     {
-        if(!$sender = $user->getSender($request->sender))
+        if (!$sender = $user->getSender($request->sender))
             return redirect()
                 ->back()
                 ->with('error', 'Usúario ou Email informado não encontrado!');
-        if($sender->id == auth()->user()->id)
+        if ($sender->id == auth()->user()->id)
             return redirect()
                 ->back()
                 ->with('error', 'Não ha necessidade de tranferir pra você mesmo!');
 
-        return view('admin.balance.transfer-confirm',compact('sender'));
+        $balance = auth()->user()->balance;
+
+        return view('admin.balance.transfer-confirm', compact('sender', 'balance'));
+
+
     }
 
-    public function transferStore(Request $request){
-        dd($request->all());
+    public function transferStore(MoneyValidationFormRequest $request, User $user)
+    {
+
+        if (!$sender = $user->find($request->sender_id))
+            return redirect()
+                ->route('balance.transfer')
+                ->with('success', 'Recebedor Não Encontrado!');
+
+
+        $balance = auth()->user()->balance()->firstOrCreate([]);
+        $response = $balance->transfer($request->value, $sender);
+
+        if ($response['success'])
+            return redirect()
+                ->route('admin.balance')
+                ->with('success', $response['message']);
+
+        return redirect()
+            ->route('balance.transfer')
+            ->with('error', $response['message']);
     }
 }
