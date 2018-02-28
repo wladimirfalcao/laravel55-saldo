@@ -3,6 +3,8 @@
 
 $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'admin'], function () {
 
+    $this->get('historic','BalanceController@historic')->name('admin.historic');
+
     $this->post('transfer', 'BalanceController@transferStore')->name('transfer.store');
     $this->post('confirm-transfer', 'BalanceController@confirmTransfer')->name('transfer.confirm');
     $this->get('transfer', 'BalanceController@transfer')->name('balance.transfer');
@@ -12,6 +14,7 @@ $this->group(['middleware' => ['auth'], 'namespace' => 'Admin', 'prefix' => 'adm
 
     $this->post('deposit', 'BalanceController@depositStore')->name('balance.store');
     $this->get('deposit', 'BalanceController@deposit')->name('balance.deposit');
+
     $this->get('balance', 'BalanceController@index')->name('admin.balance');
     $this->get('/', 'AdminController@index')->name('admin.home');
 });
