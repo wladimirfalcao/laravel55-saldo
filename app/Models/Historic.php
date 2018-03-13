@@ -25,7 +25,7 @@ class Historic extends Model
             'T' => 'Transferência',
         ];
         if (!$type)
-            return $type;
+            return $types;
 
         if ($this->user_id_transaction != null && $type == 'I')
             return 'Recebido';
