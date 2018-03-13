@@ -10,6 +10,8 @@ use App\Http\Controllers\Controller;
 
 class BalanceController extends Controller
 {
+    private $numPage = 10;
+
     public function index()
     {
         $balance = auth()->user()->balance;
@@ -23,7 +25,7 @@ class BalanceController extends Controller
         $balance = auth()->user()->balance;
         $amount = $balance ? $balance->amount : 0;
 
-        return view('admin.balance.deposit',compact('amount'));
+        return view('admin.balance.deposit', compact('amount'));
     }
 
     public function depositStore(MoneyValidationFormRequest $request)
@@ -110,8 +112,13 @@ class BalanceController extends Controller
             ->with('error', $response['message']);
     }
 
-    public function historic(){
-        $historics = auth()->user()->historics()->with(['userSender'])->get();
+    public function historic()
+    {
+        $historics = auth()
+            ->user()
+            ->historics()
+            ->with(['userSender'])
+            ->paginate($this->numPage);
 
         return view('admin.balance.historic', compact('historics'));
     }
