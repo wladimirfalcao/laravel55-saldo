@@ -128,12 +128,12 @@ class BalanceController extends Controller
 
     public function searchHistoric(Request $request, Historic $historic)
     {
-        $dateForm = $request->all();
-        $historics = $historic->sarch($dateForm, $this->numPage);
+        $dataForm = $request->except('_token');
+        $historics = $historic->sarch($dataForm, $this->numPage);
 
         $types = $historic->type();
 
-        return view('admin.balance.historic', compact('historics', 'types','dateForm'));
+        return view('admin.balance.historic', compact('historics', 'types','dataForm'));
     }
 
 }
