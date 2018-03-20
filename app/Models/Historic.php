@@ -59,6 +59,9 @@ class Historic extends Model
             if (isset($data['type']))
                 $query->where('type', $data['type']);
 
-        })->paginate($numPage);
+        })
+            ->where('user_id', auth()->user()->id)
+            ->with(['userSender'])
+            ->paginate($numPage);
     }
 }
