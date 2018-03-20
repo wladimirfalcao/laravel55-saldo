@@ -5,6 +5,7 @@ namespace App\Models;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use PhpParser\Node\Expr\Array_;
 
 class Historic extends Model
 {
@@ -46,5 +47,18 @@ class Historic extends Model
     public function getDateAttribute($value)
     {
         return Carbon::parse($value)->format('d/m/Y');
+    }
+
+    public function sarch(Array $data, $numPage)
+    {
+        return $this->where(function ($query) use ($data) {
+            if (isset($data['id']))
+                $query->where('id', $data['id']);
+            if (isset($data['date']))
+                $query->where('date', $data['date']);
+            if (isset($data['type']))
+                $query->where('type', $data['type']);
+
+        })->paginate($numPage);
     }
 }

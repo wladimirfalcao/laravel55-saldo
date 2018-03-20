@@ -11,7 +11,7 @@ use App\Http\Controllers\Controller;
 
 class BalanceController extends Controller
 {
-    private $numPage = 10;
+    private $numPage = 5;
 
     public function index()
     {
@@ -126,9 +126,14 @@ class BalanceController extends Controller
         return view('admin.balance.historic', compact('historics', 'types'));
     }
 
-    public function searchHistoric(Request $request)
+    public function searchHistoric(Request $request, Historic $historic)
     {
-        dd($request->all());
+        $dateForm = $request->all();
+        $historics = $historic->sarch($dateForm, $this->numPage);
+
+        $types = $historic->type();
+
+        return view('admin.balance.historic', compact('historics', 'types','dateForm'));
     }
 
 }
